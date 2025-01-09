@@ -78,7 +78,6 @@ mvn test
 
 curl --location 'http://localhost:8080/auth/login' \
 --header 'Content-Type: application/json' \
---header 'Cookie: JSESSIONID=A4EF1D8D18269AB93DFDACA6DD653F60' \
 --data '{
   "username": "admin",
   "password": "admin123"
@@ -90,11 +89,36 @@ curl --location 'http://localhost:8080/auth/login' \
 
 curl --location 'http://localhost:8080/users' \
 --header 'Content-Type: application/json' \
---header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTczNjQxNjcwMSwiZXhwIjoxNzM2NDIwMzAxfQ.6-OarIyBVwlvYZrQb3OUlD-QcgF2SIitpUuU-Bow_cM' \
---header 'Cookie: JSESSIONID=A4EF1D8D18269AB93DFDACA6DD653F60' \
+--header 'Authorization: Bearer <token>' \
 --data-raw '{
   "username": "john doe",
   "email": "john@test.com",
   "password": "password"
 }'
+```
+
+### GET USER
+```bash
+
+curl --location --request GET 'http://localhost:8080/users' 
+```
+
+### PUT USER
+```bash
+
+curl --location --request PUT 'localhost:8080/users/1' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <token>' \
+--data '{
+  "username": "john",
+  "email": "doe@test.com",
+  "password": "password"
+}'
+```
+
+### DELETE USER
+```bash
+
+curl --location --request DELETE 'localhost:8080/users/1' \
+--header 'Authorization: Bearer <token>' \
 ```

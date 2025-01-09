@@ -1,8 +1,8 @@
 package com.user.service;
 
+import com.user.exception.UserNotFoundException;
 import com.user.model.User;
 import com.user.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,25 +25,26 @@ public class UserService {
     }
 
     public User createUser(User user) {
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already exists: " + user.getEmail());
-        }
         return userRepository.save(user);
     }
 
-    public User updateUser(Long id, User userDetails) {
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    public User updateUser(Long id, User user) {
+        User existingUser = getUserById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
 
-        user.setUsername(userDetails.getUsername());
-        user.setEmail(userDetails.getEmail());
-        user.setPassword(userDetails.getPassword());
+        existingUser.setUsername(user.getUsername());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setPassword(user.getPassword());
 
-        return userRepository.save(user);
+        return userRepository.save(existingUser);
     }
 
     public void deleteUser(Long id) {
+        User user = getUserById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
         userRepository.deleteById(id);
     }
+
 }
 
 
